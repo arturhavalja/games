@@ -1,18 +1,19 @@
 <?php
+session_start();
 
 function sidebar($active){ ?>
     <div class="wrapper">
             <!-- Sidebar Holder -->
-            <nav id="sidebar">
+            <nav id="sidebar" style="height:100vh">
                 <div class="sidebar-header">
-                    <h3>Welcome, Name</h3>
+                    <h3>Welcome, <?php echo $_SESSION['username']; ?></h3>
                     <strong><h4>Hello</h4></strong>
                 </div>
 
                 <ul class="list-unstyled components">
                     <!-- Home -->
                     <li <?php if($active == "home")echo 'class="active"'?>>
-                        <a href="">
+                        <a href="dashboard.php">
                             <i class="glyphicon glyphicon-home"></i>
                             Home
                         </a>
@@ -65,6 +66,13 @@ function sidebar($active){ ?>
                         <a href="#">
                             <i class="glyphicon glyphicon-paperclip"></i>
                             Terms And Conditions
+                        </a>
+                    </li>
+
+                    <li <?php if($active == "invite")echo 'class="active"'?>>
+                        <a href="invite.php">
+                            <i class="glyphicon glyphicon-paperclip"></i>
+                            Invite User
                         </a>
                     </li>
                 </ul>

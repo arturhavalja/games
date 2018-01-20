@@ -1,5 +1,5 @@
-
-
+var total_balons = 2;
+var remaing_balons = total_balons;
   function Game(){
     this.isPaused = true;
     this.score = null;
@@ -34,13 +34,13 @@
   };
   Game.prototype.updateGame = function(){
     this.densityStep += this.density;
-    if(this.densityStep >= 1 && this.balloonsArray.length < 5)
+    if(this.densityStep >= 1 && this.balloonsArray.length < total_balons)
     {
       for(var i = 0; i < parseInt(this.densityStep, 10); i++)
       {
         var tempBalloon = new Balloon(0, -53, 'green', 'normal', 150);
         tempBalloon.positionX = tempBalloon.generateRandomXPos();
-        console.log(tempBalloon.positionX);
+        
         var el = document.createElement('div');
         el.className = 'balloon '+ tempBalloon.color;
         el.style.left = tempBalloon.positionX+'px';
@@ -50,6 +50,7 @@
         el.onclick = function(){
           thiz.score += thiz.balloonsArray[index].points;
           thiz.updateScore(thiz.score);
+          remaing_balons--;
           this.parentNode.removeChild(el);
         };
         this.canvasElement.appendChild(el);
@@ -57,13 +58,14 @@
         tempObj.el = el;
         tempObj.speed = tempBalloon.getRandomSpeed();
         tempObj.points = tempBalloon.points;
+        tempObj.positionY = el.style.bottom
         this.balloonsArray.push(tempObj);
         //console.log(tempObj.speed);
       }
       this.densityStep = 0;
     }
-    if (this.balloonsArray.length < 5) {
-      this.endGame  ()
+    if (this.balloonsArray.length >= total_balons) {
+      this.endGame()
     }
     for(var i = 0; i < this.balloonsArray.length; i++)
     {
@@ -71,7 +73,16 @@
     }
   };
   Game.prototype.endGame = function(){
+    var top = $(this.balloonsArray[this.balloonsArray.length-1].el).position().top;
     
+    if (top <= -100 || remaing_balons == 0){
+      clearInterval(this.intervalId);
+      var score = this.score;
+
+      $.post('/games/scripts/update_user_score.php',{game_id: 2,score: score}, function (d) {
+        console.log(d);
+      });
+    }
   };
   Game.prototype.initGame = function(){
     this.isPaused = true;
@@ -96,7 +107,7 @@
     return Math.floor(Math.random() * 201)/100;
   };
   Balloon.prototype.generateRandomXPos = function(){
-    console.log('document width = ', Math.floor(Math.random() * 450));
+    
     return Math.floor(Math.random() * 450);
   };
 

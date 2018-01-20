@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 include 'connection.php';
 
 $email = $_POST["email"];
@@ -13,17 +15,19 @@ $query = "SELECT * FROM users WHERE email = '$email'
 $result = mysqli_query($con,$query);
 
 /* Allow access if a matching record was found, else deny access. */
-if (mysqli_fetch_row($result))
-	{
-	session_start();
-	header("Cache-control: private");
+if ($row = mysqli_fetch_assoc($result)){
+	
 	$_SESSION["access"] = "granted";
+	$_SESSION["username"] = $row['username'];
+	$_SESSION["email"] = $row['email'];
+	$_SESSION["name"] = $row['name'];
+	$_SESSION["id"] = $row['id'];
 	header("Location: ../dashboard.php");
-	}
-else
-	{
+
+}
+else{
 	header("Location: ../login.php?status=invalid");
-	}
+}
 
 mysqli_close($con);  
 ?>

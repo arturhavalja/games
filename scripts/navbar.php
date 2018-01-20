@@ -1,5 +1,8 @@
 <?php
 
+session_start();
+
+
 function navbar($active){ ?>
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
@@ -18,13 +21,23 @@ function navbar($active){ ?>
         </div>
         <!-- Collection of nav links, forms, and other content for toggling -->
         <div id="navbarCollapse" class="collapse navbar-collapse">
+            <?php if(isset($_SESSION['id'])){
+            ?>
+                <ul class="nav navbar-nav navbar-right">
+                    <li <?php if($active == "home")echo 'class="active"';?>><a href="index.php">Home</a></li>
+                    <li <?php if($active == "login")echo 'class="active"';?>><a href="dashboard.php">Dashboard</a>
+                </ul>
+            <?php
+
+            }else{ ?>
             <ul class="nav navbar-nav navbar-right">
                 <li <?php if($active == "home")echo 'class="active"';?>><a href="index.php">Home</a></li>
                 <li <?php if($active == "login")echo 'class="active"';?>><a href="login.php">Login</a>
                 <li <?php if($active == "about")echo 'class="active"';?>><a href="about.php">About Us</a></li>
             </ul>
+            <?php } ?>
         </div>
         </div>
     </nav>
 
-<?php } ?>
+<?php } 

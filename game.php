@@ -1,3 +1,12 @@
+<?php 
+  
+  session_start();
+
+    if(!isset($_SESSION['id'])){
+        header('Location: login.php');
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,7 +40,6 @@
         <?php
             include "scripts/navbar.php";
             navbar("game");
-            setcookie("currentGame",$_GET["id"]);
         ?>
 
     <!-- Page Content -->
